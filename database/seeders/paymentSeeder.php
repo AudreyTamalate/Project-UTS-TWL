@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Paymentable; // Assuming you have a Paymentable model
 
 class paymentSeeder extends Seeder
 {
@@ -14,38 +14,38 @@ class paymentSeeder extends Seeder
     public function run(): void
     {
         DB::table('payments')->insert([
-            'transaction_id'    => 'T0001',
             'payment_id'        => 'P0001',
+            'transaction_id'    => 'TR001',
             'amount'            => '15000',
             'status'            => 'Completed',
         ]);
 
         DB::table('payments')->insert([
-            'transaction_id'    => 'T0002',
             'payment_id'        => 'P0002',
+            'transaction_id'    => 'TR002',
             'amount'            => '20000',
-            'status'            => 'Completed',
+            'status'            => 'Failed',
         ]);
 
         DB::table('payments')->insert([
-            'transaction_id'    => 'T0003',
             'payment_id'        => 'P0003',
+            'transaction_id'    => 'TR003',
             'amount'            => '10000',
             'status'            => 'Completed',
         ]);
 
         DB::table('payments')->insert([
-            'transaction_id'    => 'T0004',
             'payment_id'        => 'P0004',
+            'transaction_id'    => 'TR004',
             'amount'            => '15000',
             'status'            => 'Completed',
         ]);
 
         DB::table('payments')->insert([
-            'transaction_id'    => 'T0005',
             'payment_id'        => 'P0005',
+            'transaction_id'    => 'TR005',
             'amount'            => '5000',
-            'status'            => 'Completed',
+            'status'            => 'On Hold',
         ]);
     }
 }

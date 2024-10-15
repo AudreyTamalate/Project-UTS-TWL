@@ -23,6 +23,10 @@ class VehicleResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('vehicle_id')
+                ->label('Vehicle ID')
+                ->required()
+                ->maxLength(5),
                 Forms\Components\Select::make('vehicle_type')
                 ->options([
                 'Roda 2' => 'Roda 2',
@@ -41,6 +45,7 @@ class VehicleResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('vehicle_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('vehicle_type')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('plate_number')->sortable()->searchable(),
             ])

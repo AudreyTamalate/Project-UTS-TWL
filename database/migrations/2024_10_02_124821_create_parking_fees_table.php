@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('parking_fees', function (Blueprint $table) {
             $table->id();
+            $table->char('parking_fee_id',5);
             $table->char('parking_lot_id',5);
             $table->text('vehicle_type');          
             $table->integer('initial_entry_amount');    

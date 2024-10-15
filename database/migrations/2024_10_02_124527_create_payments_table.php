@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->char('transaction_id',5);
             $table->char('payment_id',5);
+            $table->char('transaction_id',5);
             $table->integer('amount');
             $table->char('status',10);
             $table->timestamps();

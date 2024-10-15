@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->char('transaction_id',5);
             $table->char('parking_id',5);
             $table->integer('amount');
             $table->text('transaction_type');

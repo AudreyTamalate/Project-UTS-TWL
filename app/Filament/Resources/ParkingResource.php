@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ParkingResource\Pages;
 use App\Filament\Resources\ParkingResource\RelationManagers;
 use App\Models\Parking;
+use App\Models\Vehicle;
+use App\Models\ParkingLot;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,21 +25,29 @@ class ParkingResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('vehicle_id')
+                Forms\Components\TextInput::make('parking_id')
+                ->label('Parking ID')
+                ->required()
+                ->maxLength(5),
+                Forms\Components\Select::make('vehicle_id')
                 ->label('Vehicle ID')
-                ->required()
-                ->maxLength(5),
-                Forms\Components\TextInput::make('parking_lot_id')
+                ->options(Vehicle::all()->pluck('vehicle_id','id'))
+                ->searchable(),
+                Forms\Components\Select::make('parking_lot_id')
                 ->label('Parking Lot ID')
-                ->required()
-                ->maxLength(5),
+                ->options(ParkingLot::all()->pluck('parking_lot_id','id'))
+                ->searchable(),
                 Forms\Components\DateTimePicker::make('check_in_at')
                 ->label('Check In At')
                 ->required(),
-                Forms\Components\TextInput::make('status')
-                ->label('Status')
-                ->required()
-                ->maxLength(10),
+                Forms\Components\Select::make('status')
+                ->options([
+                'Completed' => 'Completed',
+                'On Hold' => 'On Hold',
+                'Fail' => 'Fail',
+                ])
+                ->searchable()
+                ->native(false),
             ]);
     }
 
@@ -45,6 +55,7 @@ class ParkingResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('parking_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('vehicle_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('parking_lot_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('check_in_at')->sortable()->searchable(),

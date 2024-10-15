@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ParkingFeeResource\Pages;
 use App\Filament\Resources\ParkingFeeResource\RelationManagers;
 use App\Models\ParkingFee;
+use App\Models\ParkingLot;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,10 +24,14 @@ class ParkingFeeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('parking_lot_id')
-                ->label('Parking Lot ID')
+                Forms\Components\TextInput::make('parking_fee_id')
+                ->label('Parking Fee ID')
                 ->required()
                 ->maxLength(5),
+                Forms\Components\Select::make('parking_lot_id')
+                ->label('Parking Lot ID')
+                ->options(ParkingLot::all()->pluck('parking_lot_id','id'))
+                ->searchable(),
                 Forms\Components\Select::make('vehicle_type')
                 ->options([
                 'Roda 2' => 'Roda 2',
@@ -53,6 +58,7 @@ class ParkingFeeResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('parking_fee_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('parking_lot_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('vehicle_type')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('initial_entry_amount')->sortable()->searchable(),

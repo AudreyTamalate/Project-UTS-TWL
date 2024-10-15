@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('parking_lots', function (Blueprint $table) {
             $table->id();
+            $table->char('parking_lot_id',5);
             $table->integer('capacity');
             $table->char('latitude', 10);
             $table->char('longitude', 10);

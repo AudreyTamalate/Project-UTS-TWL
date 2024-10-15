@@ -23,6 +23,10 @@ class ParkingLotResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('parking_lot_id')
+                ->label('Parking Lot ID')
+                ->required()
+                ->maxLength(5),
                 Forms\Components\TextInput::make('capacity')
                 ->label('Capacity')
                 ->required(),
@@ -41,6 +45,7 @@ class ParkingLotResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('parking_lot_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('capacity')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('latitude')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('longitude')->sortable()->searchable(),

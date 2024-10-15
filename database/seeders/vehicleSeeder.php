@@ -14,22 +14,27 @@ class vehicleSeeder extends Seeder
     public function run(): void
     {
         DB::table('vehicles')->insert([
+            'vehicle_id'   => 'V0001',
             'vehicle_type' => 'Roda 2',
             'plate_number' => 'BK 1234 ANC',
         ]);
         DB::table('vehicles')->insert([
+            'vehicle_id'   => 'V0002',
             'vehicle_type' => 'Roda 4',
             'plate_number' => 'BK 1231 BGD',
         ]);
         DB::table('vehicles')->insert([
+            'vehicle_id'   => 'V0003',
             'vehicle_type' => 'Roda 2',
             'plate_number' => 'BK 1256 CDA',
         ]);
         DB::table('vehicles')->insert([
+            'vehicle_id'   => 'V0004',
             'vehicle_type' => 'Roda 4',
             'plate_number' => 'BK 2340 JDI',
         ]);
         DB::table('vehicles')->insert([
+            'vehicle_id'   => 'V0005',
             'vehicle_type' => 'Roda 2',
             'plate_number' => 'BK 3421 ABC',
         ]);

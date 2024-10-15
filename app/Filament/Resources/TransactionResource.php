@@ -24,24 +24,32 @@ class TransactionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('parking_id')
-                ->label('Parking ID')
+                Forms\Components\TextInput::make('transaction_id')
+                ->label('Transaction ID')
                 ->required()
                 ->maxLength(5),
+                Forms\Components\Select::make('parking_id')
+                ->label('Parking ID')
+                ->options(Parking::all()->pluck('parking_id','id'))
+                ->searchable(),
                 Forms\Components\TextInput::make('amount')
                 ->label('Amount')
                 ->required(),
                 Forms\Components\Select::make('transaction_type')
                 ->options([
-                'Cash' => 'Cash',
+                'Application' => 'Application',
                 'E-Money' => 'E-Money',
                 ])
                 ->searchable()
                 ->native(false),
                 Forms\Components\Select::make('status')
-                ->label('Status')
-                ->options(Parking::all()->pluck('status','id'))
-                ->searchable(),
+                ->options([
+                'Completed' => 'Completed',
+                'On Hold' => 'On Hold',
+                'Failed' => 'Failed',
+                ])
+                ->searchable()
+                ->native(false),
                 Forms\Components\DateTimePicker::make('transaction_at')
                 ->label('Transaction At')
                 ->required(),
@@ -58,6 +66,7 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('transaction_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('parking_id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('amount')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('transaction_type')->sortable()->searchable(),
