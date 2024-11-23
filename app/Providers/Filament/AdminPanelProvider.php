@@ -17,6 +17,10 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Widgets\TotalVehicleStatWidget;
+use App\Filament\Widgets\VehicleTableStatWidget;
+use App\Filament\Widgets\StatusTransaksiChartWidget;
+use App\Filament\Widgets\TotalPaymentStatWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -35,10 +39,12 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            //->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                TotalVehicleStatWidget::class,
+                TotalPaymentStatWidget::class,
+                VehicleTableStatWidget::class,
+                StatusTransaksiChartWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
