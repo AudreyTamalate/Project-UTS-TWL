@@ -5,7 +5,7 @@ namespace App\Filament\Resources\ParkingFeeResource\Pages;
 use App\Filament\Resources\ParkingFeeResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use App\Models\ParkingLot;
+
 
 class ListParkingFees extends ListRecords
 {
@@ -20,7 +20,7 @@ class ListParkingFees extends ListRecords
                 ->icon('heroicon-o-printer')
                 ->action(fn() => $this->cetakLaporan()) // Method cetakLaporan
                 ->requiresConfirmation()
-                ->modalHeading('Cetak Laporan Parkir')
+                ->modalHeading('Cetak Laporan Keuangan')
                 ->modalSubheading('Apakah Anda yakin ingin mencetak laporan?'),
         ];
     }
@@ -28,17 +28,21 @@ class ListParkingFees extends ListRecords
     public function cetakLaporan()
     {
         // SQL query to fetch parking fee and parking lot details
-        $data = DB::select('SELECT PF.amount AS fee_amount, PF.status AS fee_status, PL.capacity, PL.latitude, PL.longitude
-            FROM parking_fees PF
-            INNER JOIN parking_lots PL ON PF.parking_lot_id = PL.id
-            LIMIT 100
-        ');
+        $data = \DB::select('SELECT 
+            V.vehicle_type,
+            V.plate_number,
+            PF.initial_entry_amount,
+            PF.increment,
+            PF.max_flat_amount,
+            T.amount,
+            T.status
+        FROM vehicles V
+        INNER JOIN parkings P ON V.vehicle_id = P.vehicle_id
+        INNER JOIN transactions T ON P.parking_id = T.parking_id
+        INNER JOIN parking_fees PF ON PF.vehicle_type = V.vehicle_type
+        LIMIT 100');
 
-        // Log data for debugging (optional)
-        // \Log::info($data);
-
-        // Load the data into the PDF
-        $pdf = \PDF::loadView('laporan.parking_fee', ['data' => $data]);
-        return response()->streamDownload(fn() => print($pdf->output()), 'laporan_parkir.pdf');
+    $pdf = \PDF::loadView('laporan.vehicle_financial_report', ['data' => $data]);
+    return response()->streamDownload(fn() => print($pdf->output()), 'laporan_keuangan_kendaraan.pdf');
     }
 }

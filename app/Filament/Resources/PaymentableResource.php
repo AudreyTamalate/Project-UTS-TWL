@@ -12,12 +12,20 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Storage;
+use Filament\Notifications\Notification;
+use App\Imports\paymentableImport;
 
 class PaymentableResource extends Resource
 {
     protected static ?string $model = Paymentable::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Daftar Paymentable';
+    protected static ?string $navigationGroup = 'Data Pembayaran';
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     public static function form(Form $form): Form
     {
@@ -42,12 +50,40 @@ class PaymentableResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+            ->headerActions([
+                Action::make('importExcel')
+                ->label('Import Excel')
+                ->action(function (array $data) {
+                // Pastikan $data['file'] adalah jalur yang valid distorage
+                $filePath = storage_path('app/public/' . $data['file']);
+               
+                // Import file menggunakan jalur absolut
+               Excel::import(new paymentableImport, $filePath);
+                // Tampilkan notifikasi sukses
+               Notification::make()
+                ->title('Data berhasil diimpor!')
+                ->success()
+                ->send();
+                })
+               ->form([
+                FileUpload::make('file')
+                    ->label('Pilih File Excel')
+                    ->disk('public') // Pastikan disimpan di disk 'public'
+                    ->directory('imports')
+                    ->acceptedFileTypes(['application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
+                    ->required(),
+                ])
+                ->modalHeading('Import Data Transaction')
+                ->modalButton('Import')
+                ->color('success'),
+            ])
+                ->bulkActions([
+                    Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                    ]),
             ]);
     }
+
 
     public static function getRelations(): array
     {

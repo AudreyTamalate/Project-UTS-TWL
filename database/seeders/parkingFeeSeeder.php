@@ -27,7 +27,7 @@ class parkingFeeSeeder extends Seeder
             'parking_lot_id'        => 'PL002',
             'vehicle_type'          => 'Roda 2',
             'initial_entry_amount'  => '2000',
-            'increment'             => '400',
+            'increment'             => '200',
             'max_flat_amount'       => '5000',
             'penalty_duration'      => '60',
         ]);
@@ -45,7 +45,7 @@ class parkingFeeSeeder extends Seeder
             'parking_lot_id'        => 'PL004',
             'vehicle_type'          => 'Roda 4',
             'initial_entry_amount'  => '5000',
-            'increment'             => '1000',
+            'increment'             => '500',
             'max_flat_amount'       => '20000',
             'penalty_duration'      => '60',
         ]);
@@ -54,7 +54,7 @@ class parkingFeeSeeder extends Seeder
             'parking_lot_id'        => 'PL005',
             'vehicle_type'          => 'Roda 4',
             'initial_entry_amount'  => '5000',
-            'increment'             => '1500',
+            'increment'             => '500',
             'max_flat_amount'       => '20000',
             'penalty_duration'      => '90',
         ]);
