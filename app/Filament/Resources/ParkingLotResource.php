@@ -12,13 +12,22 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\Action;
+use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Storage;
+use Filament\Notifications\Notification;
+use App\Imports\parkingLotImport;
+
 
 class ParkingLotResource extends Resource
 {
     protected static ?string $model = ParkingLot::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Daftar Parking Lot';
+    protected static ?string $navigationGroup = 'Data Parkir';
 
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
     public static function form(Form $form): Form
     {
         return $form
@@ -56,10 +65,37 @@ class ParkingLotResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+            ->headerActions([
+                Action::make('importExcel')
+                ->label('Import Excel')
+                ->action(function (array $data) {
+                // Pastikan $data['file'] adalah jalur yang valid distorage
+                $filePath = storage_path('app/public/' . $data['file']);
+               
+                // Import file menggunakan jalur absolut
+               Excel::import(new parkingLotImport, $filePath);
+                // Tampilkan notifikasi sukses
+               Notification::make()
+                ->title('Data berhasil diimpor!')
+                ->success()
+                ->send();
+                })
+               ->form([
+                FileUpload::make('file')
+                    ->label('Pilih File Excel')
+                    ->disk('public') // Pastikan disimpan di disk 'public'
+                    ->directory('imports')
+                    ->acceptedFileTypes(['application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
+                    ->required(),
+                ])
+                ->modalHeading('Import Data Parking Lot')
+                ->modalButton('Import')
+                ->color('success'),
+            ])
+                ->bulkActions([
+                    Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                    ]),
             ]);
     }
 
