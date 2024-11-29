@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('paymentables', function (Blueprint $table) {
             $table->id();
             $table->char('paymentable_id',5);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Foreign Key to users
             $table->timestamps();
         });
     }

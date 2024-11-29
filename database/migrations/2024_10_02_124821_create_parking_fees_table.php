@@ -19,7 +19,8 @@ return new class extends Migration
             $table->integer('initial_entry_amount');    
             $table->integer('increment');               
             $table->integer('max_flat_amount');         
-            $table->integer('penalty_duration');    
+            $table->integer('penalty_duration'); 
+            $table->foreign('parking_lot_id')->references('parking_lot_id')->on('parking_lots')->onDelete('cascade'); // Foreign Key to parking_lots   
             $table->timestamps();
         });
     }

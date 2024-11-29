@@ -17,6 +17,7 @@ return new class extends Migration
             $table->char('vehicle_id',5);
             $table->text('vehicle_type');
             $table->char('plate_number',20);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Foreign Key to users
             $table->timestamps();
         });
     }

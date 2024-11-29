@@ -22,6 +22,8 @@ return new class extends Migration
             $table->datetime('paid_at');
             $table->integer('duration');
             $table->timestamps();
+ $table->foreign('parking_id')->references('parking_id')->on('parkings')->onDelete('cascade'); // Foreign Key to parkings
+           
         });
     }
 

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('amount');
             $table->char('status',10);
             $table->timestamps();
+
+            $table->foreign('transaction_id')->references('transaction_id')->on('transactions')->onDelete('cascade'); // Foreign Key to transactions
         });
     }
 

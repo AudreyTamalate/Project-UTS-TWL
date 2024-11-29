@@ -26,23 +26,37 @@ class ListParkingFees extends ListRecords
     }
 
     public function cetakLaporan()
-    {
-        // SQL query to fetch parking fee and parking lot details
+{
+    // SQL query to fetch all transactions and total revenue per day
         $data = \DB::select('SELECT 
+            DATE(T.transaction_at) AS transaction_date,  -- Group by date
             V.vehicle_type,
             V.plate_number,
-            PF.initial_entry_amount,
-            PF.increment,
-            PF.max_flat_amount,
             T.amount,
             T.status
-        FROM vehicles V
-        INNER JOIN parkings P ON V.vehicle_id = P.vehicle_id
-        INNER JOIN transactions T ON P.parking_id = T.parking_id
+        FROM transactions T
+        INNER JOIN parkings P ON T.parking_id = P.parking_id
+        INNER JOIN vehicles V ON P.vehicle_id = V.vehicle_id
         INNER JOIN parking_fees PF ON PF.vehicle_type = V.vehicle_type
-        LIMIT 100');
+        ORDER BY transaction_date DESC, T.transaction_at DESC');  // Order by date and time for transactions
 
-    $pdf = \PDF::loadView('laporan.vehicle_financial_report', ['data' => $data]);
-    return response()->streamDownload(fn() => print($pdf->output()), 'laporan_keuangan_kendaraan.pdf');
+    // Calculate total revenue per day
+        $totalsPerDay = \DB::select('SELECT 
+            DATE(T.transaction_at) AS transaction_date,  
+            SUM(T.amount) AS total_revenue
+        FROM transactions T
+        INNER JOIN parkings P ON T.parking_id = P.parking_id
+        INNER JOIN vehicles V ON P.vehicle_id = V.vehicle_id
+        INNER JOIN parking_fees PF ON PF.vehicle_type = V.vehicle_type
+        GROUP BY transaction_date
+        ORDER BY transaction_date DESC');  // Group by date and sum the amounts
+
+    // Generate the PDF with the data and totals
+        $pdf = \PDF::loadView('laporan.vehicle_financial_report', [
+            'data' => $data,
+            'totalsPerDay' => $totalsPerDay
+        ]);
+
+        return response()->streamDownload(fn() => print($pdf->output()), 'laporan_keuangan_per_hari.pdf');
     }
 }

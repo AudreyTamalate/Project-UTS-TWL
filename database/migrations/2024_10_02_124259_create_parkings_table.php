@@ -19,6 +19,9 @@ return new class extends Migration
             $table->datetime('check_in_at');
             $table->char('status',10);
             $table->timestamps();
+
+            $table->foreign('vehicle_id')->references('vehicle_id')->on('vehicles')->onDelete('cascade'); // Foreign Key to vehicles
+            $table->foreign('parking_lot_id')->references('parking_lot_id')->on('parking_lots')->onDelete('cascade'); // Foreign Key to parking_lots
         });
     }
 

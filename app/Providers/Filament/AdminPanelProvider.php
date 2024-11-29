@@ -17,10 +17,9 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Filament\Widgets\TotalVehicleStatWidget;
+use App\Filament\Widgets\TotalStatWidget;
 use App\Filament\Widgets\VehicleTableStatWidget;
 use App\Filament\Widgets\StatusTransaksiChartWidget;
-use App\Filament\Widgets\TotalPaymentStatWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -37,12 +36,11 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                Pages\Dashboard::class, // This is where the widgets are managed
             ])
-            //->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // Define your widgets and layout in the dashboard page
             ->widgets([
-                TotalVehicleStatWidget::class,
-                TotalPaymentStatWidget::class,
+                TotalStatWidget::class,
                 VehicleTableStatWidget::class,
                 StatusTransaksiChartWidget::class,
             ])
